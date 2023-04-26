@@ -15,7 +15,13 @@ public class CodeBlock extends Statement {
     }
 
     public Optional<Integer> lookupVariable(String name) {
-        return Optional.ofNullable(variables.get(name));
+        if (variables.containsKey(name)) {
+            return Optional.of(variables.get(name));
+        }
+        if (getContext() == null) {
+            return Optional.empty();
+        }
+        return getContext().lookupVariable(name);
     }
 
     public void declareVariable(String name, Integer value) {
@@ -49,5 +55,14 @@ public class CodeBlock extends Statement {
     @Override
     public boolean hasEnded() {
         return nextStatement >= statements.size();
+    }
+
+    @Override
+    public String toString() {
+        // todo: change it
+        return "CodeBlock{" +
+                "variables=" + variables +
+                ", nextStatement=" + nextStatement +
+                '}';
     }
 }
