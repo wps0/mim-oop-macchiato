@@ -1,8 +1,10 @@
-package pl.wieczorekp.po1.instructions;
+package pl.wieczorekp.po1.instructions.statements;
+
+import pl.wieczorekp.po1.instructions.Instruction;
 
 public abstract class Statement extends Instruction {
-    protected Statement(CodeBlock containingBlock) {
-        super(containingBlock);
+    protected Statement(CodeBlock context) {
+        super(context);
     }
 
     public void execute() {
