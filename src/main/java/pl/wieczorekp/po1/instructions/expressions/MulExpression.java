@@ -11,4 +11,9 @@ public class MulExpression extends TwoArgsExpression {
     public Integer evaluateInContext(CodeBlock context) {
         return lop.evaluateInContext(context) * rop.evaluateInContext(context);
     }
+
+    @Override
+    public String toString() {
+        return lop + " * " + rop;
+    }
 }

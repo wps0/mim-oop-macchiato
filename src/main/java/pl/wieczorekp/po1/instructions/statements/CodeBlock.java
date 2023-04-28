@@ -5,7 +5,7 @@ import pl.wieczorekp.po1.instructions.IllegalNameException;
 
 import java.util.*;
 
-public class CodeBlock extends Statement {
+public class CodeBlock extends BlockStatement {
     private Map<String, Integer> variables;
     private List<Statement> statements;
     private int instructionPointer;
@@ -27,7 +27,7 @@ public class CodeBlock extends Statement {
         return getContext().lookupVariable(name);
     }
 
-    private void declareVariable(String name, Integer value, boolean force) {
+    private void assignVariable(String name, Integer value, boolean force) {
         if (!force && variables.containsKey(name)) {
             throw new IllegalNameException("redeclaration of variable " + name);
         }
@@ -36,14 +36,14 @@ public class CodeBlock extends Statement {
     }
 
     public void declareVariable(String name, Integer value) {
-        declareVariable(name, value, false);
+        assignVariable(name, value, false);
+    }
+
+    public void assignVariable(String name, Integer value) {
+        assignVariable(name, value, true);
     }
 
     public void addStatement(Statement newStatement) {
-        if (hasEnded()) {
-            throw new ExecutionEndedException("the execution of the block has ended");
-        }
-
         statements.add(newStatement);
     }
 
@@ -52,6 +52,13 @@ public class CodeBlock extends Statement {
             throw new IndexOutOfBoundsException("IP: " + instructionPointer + " out of bounds");
         }
         this.instructionPointer = instructionPointer;
+    }
+
+    public int getNestedness() {
+        if (context != null) {
+            return context.getNestedness() + 1;
+        }
+        return 0;
     }
 
     @Override
@@ -73,10 +80,32 @@ public class CodeBlock extends Statement {
 
     @Override
     public String toString() {
-        // todo: change it
-        return "CodeBlock{" +
-                "variables=" + variables +
-                ", nextStatement=" + instructionPointer +
-                '}';
+        int nestedness = getNestedness();
+        // 2 spaces per level
+        String prefix = "  ".repeat(nestedness);
+
+        StringBuilder partOfCode = new StringBuilder();
+        partOfCode.append(prefix).append("begin block\n");
+
+        for (Statement s : statements) {
+            partOfCode.append(prefix).append("  ");
+            partOfCode.append(s.toString()).append('\n');
+        }
+
+        partOfCode.append(prefix).append("end block\n");
+        return partOfCode.toString();
+    }
+
+    @Override
+    public Optional<Statement> getCurrentStatement() {
+        if (hasEnded()) {
+            return Optional.empty();
+
+        }
+        Statement last = statements.get(instructionPointer);
+        if (last instanceof BlockStatement) {
+            return ((BlockStatement) last).getCurrentStatement();
+        }
+        return Optional.ofNullable(last);
     }
 }

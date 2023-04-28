@@ -4,9 +4,10 @@ import lombok.NonNull;
 import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
 
+import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class IfStatement extends Statement {
+public class IfStatement extends BlockStatement {
     private Expression leftOperand;
     private Expression rightOperand;
     private Condition condition;
@@ -14,12 +15,12 @@ public class IfStatement extends Statement {
     private CodeBlock elseBranchBlock;
     private Branch branch;
 
-    protected IfStatement(CodeBlock context,
-                          Expression leftOperand,
-                          Expression rightOperand,
-                          Condition condition,
-                          @NonNull CodeBlock ifBranchBlock,
-                          CodeBlock elseBranchBlock) {
+    public IfStatement(CodeBlock context,
+                       Expression leftOperand,
+                       Expression rightOperand,
+                       Condition condition,
+                       @NonNull CodeBlock ifBranchBlock,
+                       CodeBlock elseBranchBlock) {
         super(context);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
@@ -42,7 +43,7 @@ public class IfStatement extends Statement {
             return;
         }
 
-        CodeBlock executionBranch = branch == Branch.IF_BLOCK ? ifBranchBlock : elseBranchBlock;
+        CodeBlock executionBranch = getExecutionBranch();
         if (executionBranch != null) {
             executionBranch.executeOne();
             if (executionBranch.hasEnded()) {
@@ -54,6 +55,31 @@ public class IfStatement extends Statement {
     @Override
     protected boolean hasEnded() {
         return branch == Branch.EXECUTION_FINISHED;
+    }
+
+    @Override
+    public Optional<Statement> getCurrentStatement() {
+        return hasEnded() ? Optional.empty() : getExecutionBranch().getCurrentStatement();
+    }
+
+    private CodeBlock getExecutionBranch() {
+        return branch == Branch.IF_BLOCK ? ifBranchBlock : elseBranchBlock;
+    }
+
+    @Override
+    public String toString() {
+        String prefix = "  ".repeat(context.getNestedness()+1);
+        StringBuilder asString = new StringBuilder();
+
+        asString.append("if ").append(leftOperand).append(" ").append(condition).append(" ").append(rightOperand)
+                .append(" (branch: ").append(branch).append(")\n")
+                .append(ifBranchBlock);
+        if (elseBranchBlock != null) {
+                asString.append(prefix).append("else\n")
+                        .append(elseBranchBlock);
+        }
+
+        return asString.toString();
     }
 
     public enum Branch {
