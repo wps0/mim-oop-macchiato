@@ -1,25 +1,15 @@
 package pl.wieczorekp.po1.instructions.expressions;
 
-import pl.wieczorekp.po1.instructions.Instruction;
 import pl.wieczorekp.po1.instructions.statements.CodeBlock;
+
+import java.util.Optional;
 
 /**
  * Expressions are evaluated lazily.
  */
-public abstract class Expression extends Instruction {
-    protected Expression(CodeBlock context) {
-        super(context);
-    }
-
-    public abstract Integer evaluate();
-
-    public Integer evaluateInContext(CodeBlock newContext) {
-        CodeBlock origContext = getContext();
-        switchContext(newContext);
-
-        Integer result = evaluate();
-
-        switchContext(origContext);
-        return result;
-    }
+public interface Expression {
+    /**
+     * Evaluates the expression. If an error occurred, an exception should be thrown.
+     */
+    Integer evaluateInContext(CodeBlock context);
 }

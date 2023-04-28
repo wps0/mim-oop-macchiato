@@ -36,8 +36,8 @@ public class IfStatement extends Statement {
         }
 
         if (branch == Branch.CONDITION) {
-            Integer exp1 = leftOperand.evaluate();
-            Integer exp2 = rightOperand.evaluate();
+            Integer exp1 = leftOperand.evaluateInContext(context);
+            Integer exp2 = rightOperand.evaluateInContext(context);
             branch = condition.test(exp1, exp2) ? Branch.IF_BLOCK : Branch.ELSE_BLOCK;
             return;
         }
@@ -57,7 +57,7 @@ public class IfStatement extends Statement {
     }
 
     public enum Branch {
-        CONDITION, IF_BLOCK, ELSE_BLOCK, EXECUTION_FINISHED;
+        CONDITION, IF_BLOCK, ELSE_BLOCK, EXECUTION_FINISHED
     }
 
     public enum Condition {
@@ -68,7 +68,7 @@ public class IfStatement extends Statement {
         GEQ((a, b) -> a >= b),
         LEQ((a, b) -> a <= b);
 
-        private BiPredicate<Integer, Integer> condition;
+        private final BiPredicate<Integer, Integer> condition;
 
         Condition(BiPredicate<Integer, Integer> condition) {
             this.condition = condition;

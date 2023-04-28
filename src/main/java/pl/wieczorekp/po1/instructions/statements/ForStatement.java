@@ -2,7 +2,6 @@ package pl.wieczorekp.po1.instructions.statements;
 
 import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
-import pl.wieczorekp.po1.instructions.expressions.SimpleExpression;
 
 public class ForStatement extends Statement {
     private CodeBlock body;

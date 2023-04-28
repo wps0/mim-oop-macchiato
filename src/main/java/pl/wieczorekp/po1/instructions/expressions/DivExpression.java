@@ -3,12 +3,12 @@ package pl.wieczorekp.po1.instructions.expressions;
 import pl.wieczorekp.po1.instructions.statements.CodeBlock;
 
 public class DivExpression extends TwoArgsExpression {
-    protected DivExpression(CodeBlock context, Expression lop, Expression rop) {
-        super(context, lop, rop);
+    public DivExpression(Expression lop, Expression rop) {
+        super(lop, rop);
     }
 
     @Override
-    public Integer evaluate() {
+    public Integer evaluateInContext(CodeBlock context) {
         return lop.evaluateInContext(context) / rop.evaluateInContext(context);
     }
 }

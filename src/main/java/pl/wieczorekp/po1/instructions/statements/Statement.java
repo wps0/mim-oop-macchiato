@@ -1,10 +1,9 @@
 package pl.wieczorekp.po1.instructions.statements;
 
-import pl.wieczorekp.po1.instructions.Instruction;
-
-public abstract class Statement extends Instruction {
+public abstract class Statement {
+    protected CodeBlock context;
     protected Statement(CodeBlock context) {
-        super(context);
+        this.context = context;
     }
 
     public void execute() {
@@ -15,4 +14,8 @@ public abstract class Statement extends Instruction {
 
     public abstract void executeOne();
     protected abstract boolean hasEnded();
+
+    public CodeBlock getContext() {
+        return context;
+    }
 }
