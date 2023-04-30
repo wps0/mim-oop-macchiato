@@ -7,6 +7,23 @@ import pl.wieczorekp.po1.instructions.statements.IfStatement.Condition;
 import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ONE_LITERAL;
 import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ZERO_LITERAL;
 
+/*
+ * Class members order:
+ *  - static final vars
+ *  - static vars
+ *  - final vars
+ *  - other vars
+ *  - constructors
+ *  - abstract methods
+ *  - other methods
+ *  - static methods
+ *  - overloaded methods (overloaded from classes other than Object; overloaded from Object class)
+ *  - nested classes
+ *  - nested enums
+ * All of the blocks should be ordered by visibility (namely: public, protected, package-private, private)
+ *
+ */
+
 public class Main {
 
     public static void executeSampleProgram() {

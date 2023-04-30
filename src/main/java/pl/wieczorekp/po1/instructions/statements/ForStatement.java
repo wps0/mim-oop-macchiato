@@ -5,13 +5,12 @@ import pl.wieczorekp.po1.instructions.expressions.Expression;
 import java.util.Optional;
 
 public class ForStatement extends BlockStatement {
-    private CodeBlock body;
-    private String controlVariableName;
+    private final String controlVariableName;
+    private final CodeBlock body;
+    private Expression repsExpression;
     private int counter;
     private int reps;
-    private Expression repsExpression;
 
-    // TODO: jak to z tymi zmiennymi ma byc?
     public ForStatement(CodeBlock context, String controlVariableName, Expression reps, CodeBlock body) {
         super(context);
         this.counter = 0;
@@ -21,11 +20,19 @@ public class ForStatement extends BlockStatement {
         this.body = body;
     }
 
+    private void setup() {
+        if (repsExpression != null) {
+            reps = repsExpression.evaluateInContext(context);
+            repsExpression = null;
+        }
+        body.assignVariable(controlVariableName, counter);
+    }
+
     @Override
     public void executeOne() {
-        if (counter == 0) {
-            reps = repsExpression.evaluateInContext(context);
-            body.assignVariable(controlVariableName, counter);
+        if (repsExpression != null || body.hasEnded()) {
+            // first-time execution in the current context
+            setup();
         }
         if (hasEnded()) {
             return;
@@ -33,14 +40,16 @@ public class ForStatement extends BlockStatement {
 
         if (body.hasEnded()) {
             body.setInstructionPointer(0);
-            body.assignVariable(controlVariableName, ++counter);
+            body.resetVariables();
+            counter++;
+            setup();
         } else {
             body.executeOne();
         }
     }
 
     @Override
-    protected boolean hasEnded() {
+    public boolean hasEnded() {
         return counter >= reps;
     }
 
@@ -59,13 +68,9 @@ public class ForStatement extends BlockStatement {
 
     @Override
     public String toString() {
-        StringBuilder asString = new StringBuilder();
-
-        asString.append("for ").append(controlVariableName).append(" := 0 (current value: ")
-                .append(counter).append(')').append(" < ").append(reps)
-                .append(" (reps expression: ").append(repsExpression).append("; hasEnded=").append(hasEnded()).append(")\n");
-        asString.append(body.toString());
-
-        return asString.toString();
+        return "for " + controlVariableName + " := 0 (current value: " +
+                counter + ')' + " < " + reps +
+                " (reps expression: " + repsExpression + "; hasEnded=" + hasEnded() + ")\n" +
+                body.toString();
     }
 }

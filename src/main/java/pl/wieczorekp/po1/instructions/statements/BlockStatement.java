@@ -8,4 +8,11 @@ public abstract class BlockStatement extends Statement {
     }
 
     public abstract Optional<Statement> getCurrentStatement(boolean shiftIP);
+    public abstract boolean hasEnded();
+
+    public void execute() {
+        while (!hasEnded()) {
+            executeOne();
+        }
+    }
 }

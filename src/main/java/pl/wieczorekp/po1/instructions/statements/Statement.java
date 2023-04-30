@@ -6,14 +6,7 @@ public abstract class Statement {
         this.context = context;
     }
 
-    public void execute() {
-        while (!hasEnded()) {
-            executeOne();
-        }
-    }
-
     public abstract void executeOne();
-    protected abstract boolean hasEnded();
 
     public CodeBlock getContext() {
         return context;

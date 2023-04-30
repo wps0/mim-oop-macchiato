@@ -62,7 +62,7 @@ public class DebuggerExecution extends Execution {
         System.out.println(" -------------------------------------- ");
 
         // matches strings formatted like: <str> <int>
-        Pattern inputCmdPattern = Pattern.compile("([A-Za-z]+)\\s+(\\d*)");
+        Pattern inputCmdPattern = Pattern.compile("([A-Za-z]+)(?:\\s+(\\d*)|)");
         try (Scanner scanner = new Scanner(System.in)) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().toLowerCase();
@@ -73,7 +73,7 @@ public class DebuggerExecution extends Execution {
                     continue;
                 }
                 String cmd = lineMatcher.group(1);
-                Integer arg = lineMatcher.groupCount() == 2 ? Integer.valueOf(lineMatcher.group(2)) : null;
+                Integer arg = lineMatcher.group(2) != null ? Integer.valueOf(lineMatcher.group(2)) : null;
 
                 switch (cmd) {
                     case "c", "continue" -> continueExecution();

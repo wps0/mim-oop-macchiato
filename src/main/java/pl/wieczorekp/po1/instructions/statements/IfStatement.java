@@ -29,9 +29,16 @@ public class IfStatement extends BlockStatement {
         this.branch = Branch.CONDITION;
     }
 
+    private CodeBlock getExecutionBranch() {
+        return branch == Branch.IF_BLOCK ? ifBranchBlock : elseBranchBlock;
+    }
+
     @Override
     public void executeOne() {
-         if (branch == Branch.CONDITION) {
+        if (hasEnded()) {
+            branch = Branch.CONDITION;
+        }
+        if (branch == Branch.CONDITION) {
             Integer exp1 = leftOperand.evaluateInContext(context);
             Integer exp2 = rightOperand.evaluateInContext(context);
             branch = condition.test(exp1, exp2) ? Branch.IF_BLOCK : Branch.ELSE_BLOCK;
@@ -43,12 +50,13 @@ public class IfStatement extends BlockStatement {
             executionBranch.executeOne();
             if (executionBranch.hasEnded()) {
                 branch = Branch.EXECUTION_FINISHED;
+                executionBranch.setInstructionPointer(0);
             }
         }
     }
 
     @Override
-    protected boolean hasEnded() {
+    public boolean hasEnded() {
         return branch == Branch.EXECUTION_FINISHED;
     }
 
@@ -60,11 +68,7 @@ public class IfStatement extends BlockStatement {
         if (branch == Branch.CONDITION) {
             return Optional.of(this);
         }
-        return getExecutionBranch() == null ? Optional.empty() : getExecutionBranch().getCurrentStatement();
-    }
-
-    private CodeBlock getExecutionBranch() {
-        return branch == Branch.IF_BLOCK ? ifBranchBlock : elseBranchBlock;
+        return getExecutionBranch() == null ? Optional.empty() : getExecutionBranch().getCurrentStatement(shiftIP);
     }
 
     @Override
