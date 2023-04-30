@@ -61,7 +61,7 @@ public class IfStatement extends BlockStatement {
     }
 
     @Override
-    public Optional<Statement> getCurrentStatement() {
+    public Optional<Statement> getCurrentStatement(boolean shiftIP) {
         if (hasEnded()) {
             return Optional.empty();
         }

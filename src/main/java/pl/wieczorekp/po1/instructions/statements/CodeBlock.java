@@ -27,14 +27,6 @@ public class CodeBlock extends BlockStatement {
         return getContext().lookupVariable(name);
     }
 
-    private void assignVariable(String name, Integer value, boolean force) {
-        if (!force && variables.containsKey(name)) {
-            throw new IllegalNameException("redeclaration of variable " + name);
-        }
-
-        variables.put(name, value);
-    }
-
     public void declareVariable(String name, Integer value) {
         assignVariable(name, value, false);
     }
@@ -51,6 +43,10 @@ public class CodeBlock extends BlockStatement {
         return variables;
     }
 
+    public void resetVariables() {
+        variables.clear();
+    }
+
     public void setInstructionPointer(int instructionPointer) {
         if (instructionPointer < 0 || instructionPointer > statements.size()) {
             throw new IndexOutOfBoundsException("IP: " + instructionPointer + " out of bounds");
@@ -65,14 +61,33 @@ public class CodeBlock extends BlockStatement {
         return 0;
     }
 
+    public int getIp(boolean shift) {
+        if (shift) {
+            return instructionPointer == 0 ? statements.size() - 1 : instructionPointer - 1;
+        }
+        return instructionPointer;
+    }
+
+    private void assignVariable(String name, Integer value, boolean force) {
+        if (!force && variables.containsKey(name)) {
+            throw new IllegalNameException("redeclaration of variable " + name);
+        }
+
+        variables.put(name, value);
+    }
+
     @Override
     public void executeOne() {
         if (hasEnded()) {
             throw new ExecutionEndedException("no more statements to execute");
         }
 
-        statements.get(instructionPointer).executeOne();
-        if (statements.get(instructionPointer).hasEnded()) {
+        Statement next = statements.get(instructionPointer);
+        next.executeOne();
+        if (next instanceof BlockStatement) {
+            // if BlockStatement hasn't finished execution, don't increase the instruction pointer
+            instructionPointer += Boolean.compare(((BlockStatement) next).hasEnded(), false);
+        } else {
             instructionPointer++;
         }
     }
@@ -80,6 +95,19 @@ public class CodeBlock extends BlockStatement {
     @Override
     public boolean hasEnded() {
         return instructionPointer >= statements.size();
+    }
+
+    @Override
+    public Optional<Statement> getCurrentStatement(boolean shiftIP) {
+        if (hasEnded()) {
+            return Optional.empty();
+        }
+
+        Statement last = statements.get(getIp(shiftIP));
+        if (last instanceof BlockStatement) {
+            return ((BlockStatement) last).getCurrentStatement(shiftIP);
+        }
+        return Optional.of(last);
     }
 
     @Override
@@ -98,18 +126,5 @@ public class CodeBlock extends BlockStatement {
 
         partOfCode.append(prefix).append("end block\n");
         return partOfCode.toString();
-    }
-
-    @Override
-    public Optional<Statement> getCurrentStatement(boolean shiftIP) {
-        if (hasEnded()) {
-            return Optional.empty();
-        }
-
-        Statement last = statements.get(instructionPointer - Boolean.compare(shiftIP, false));
-        if (last instanceof BlockStatement) {
-            return ((BlockStatement) last).getCurrentStatement(shiftIP);
-        }
-        return Optional.of(last);
     }
 }

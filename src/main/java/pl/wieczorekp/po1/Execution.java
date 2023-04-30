@@ -16,7 +16,7 @@ public class Execution {
         try {
             code.execute();
         } catch (Exception e) {
-            Optional<Statement> cause = code.getCurrentStatement();
+            Optional<Statement> cause = code.getCurrentStatement(true);
             System.err.printf("""
                             Execution error at statement %s
                             Exception: %s

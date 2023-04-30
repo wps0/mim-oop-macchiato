@@ -94,7 +94,7 @@ public class Main {
         // print k
         ifPEq0Branch.addStatement(new PrintStatement(ifPEq0Branch, kVar));
 
-        DebuggerExecution program = new DebuggerExecution(root);
+        Execution program = new Execution(root);
         program.execute();
     }
 

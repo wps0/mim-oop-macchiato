@@ -54,12 +54,12 @@ public class ForStatement extends BlockStatement {
     }
 
     @Override
-    public Optional<Statement> getCurrentStatement() {
+    public Optional<Statement> getCurrentStatement(boolean shiftIP) {
         if (hasEnded()) {
             return Optional.empty();
         }
 
-        Optional<Statement> bodyStatement = body.getCurrentStatement();
+        Optional<Statement> bodyStatement = body.getCurrentStatement(shiftIP);
         if (bodyStatement.isEmpty()) {
             return Optional.of(this);
         }

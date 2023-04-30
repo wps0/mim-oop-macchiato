@@ -22,7 +22,7 @@ public class DebuggerExecution extends Execution {
         for (int i = 0; i < steps; i++) {
             try {
                 code.executeOne();
-                System.out.println(code.getCurrentStatement());
+                System.out.println(code.getCurrentStatement(false));
             } catch (ExecutionEndedException e) {
                 System.out.println("Program finished");
             }
@@ -30,7 +30,7 @@ public class DebuggerExecution extends Execution {
     }
 
     public void display(int maxScope) {
-        Optional<Statement> currentStatement = code.getCurrentStatement();
+        Optional<Statement> currentStatement = code.getCurrentStatement(false);
         if (currentStatement.isEmpty()) {
             throw new NoSuchElementException("no statement is being executed");
         }
