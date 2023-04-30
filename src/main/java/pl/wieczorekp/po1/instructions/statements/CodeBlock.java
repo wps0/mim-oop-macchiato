@@ -47,6 +47,10 @@ public class CodeBlock extends BlockStatement {
         statements.add(newStatement);
     }
 
+    public Map<String, Integer> getVariables() {
+        return variables;
+    }
+
     public void setInstructionPointer(int instructionPointer) {
         if (instructionPointer < 0 || instructionPointer > statements.size()) {
             throw new IndexOutOfBoundsException("IP: " + instructionPointer + " out of bounds");
@@ -97,15 +101,15 @@ public class CodeBlock extends BlockStatement {
     }
 
     @Override
-    public Optional<Statement> getCurrentStatement() {
+    public Optional<Statement> getCurrentStatement(boolean shiftIP) {
         if (hasEnded()) {
             return Optional.empty();
+        }
 
-        }
-        Statement last = statements.get(instructionPointer);
+        Statement last = statements.get(instructionPointer - Boolean.compare(shiftIP, false));
         if (last instanceof BlockStatement) {
-            return ((BlockStatement) last).getCurrentStatement();
+            return ((BlockStatement) last).getCurrentStatement(shiftIP);
         }
-        return Optional.ofNullable(last);
+        return Optional.of(last);
     }
 }

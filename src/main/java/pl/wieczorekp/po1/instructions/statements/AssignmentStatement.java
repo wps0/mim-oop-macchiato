@@ -17,10 +17,6 @@ public class AssignmentStatement extends Statement {
 
     @Override
     public void executeOne() {
-        if (hasEnded()) {
-            throw new ExecutionEndedException();
-        }
-
         context.assignVariable(varName, value.evaluateInContext(context));
         hasEnded = true;
     }

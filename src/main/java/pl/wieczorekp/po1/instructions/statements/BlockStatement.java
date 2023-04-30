@@ -7,5 +7,5 @@ public abstract class BlockStatement extends Statement {
         super(context);
     }
 
-    public abstract Optional<Statement> getCurrentStatement();
+    public abstract Optional<Statement> getCurrentStatement(boolean shiftIP);
 }

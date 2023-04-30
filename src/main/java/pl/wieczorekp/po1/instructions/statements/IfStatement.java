@@ -1,7 +1,6 @@
 package pl.wieczorekp.po1.instructions.statements;
 
 import lombok.NonNull;
-import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
 
 import java.util.Optional;
@@ -32,11 +31,7 @@ public class IfStatement extends BlockStatement {
 
     @Override
     public void executeOne() {
-        if (branch == Branch.EXECUTION_FINISHED) {
-            throw new ExecutionEndedException();
-        }
-
-        if (branch == Branch.CONDITION) {
+         if (branch == Branch.CONDITION) {
             Integer exp1 = leftOperand.evaluateInContext(context);
             Integer exp2 = rightOperand.evaluateInContext(context);
             branch = condition.test(exp1, exp2) ? Branch.IF_BLOCK : Branch.ELSE_BLOCK;
@@ -59,7 +54,13 @@ public class IfStatement extends BlockStatement {
 
     @Override
     public Optional<Statement> getCurrentStatement() {
-        return hasEnded() ? Optional.empty() : getExecutionBranch().getCurrentStatement();
+        if (hasEnded()) {
+            return Optional.empty();
+        }
+        if (branch == Branch.CONDITION) {
+            return Optional.of(this);
+        }
+        return getExecutionBranch() == null ? Optional.empty() : getExecutionBranch().getCurrentStatement();
     }
 
     private CodeBlock getExecutionBranch() {

@@ -1,6 +1,5 @@
 package pl.wieczorekp.po1.instructions.statements;
 
-import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
 
 import java.util.Optional;
@@ -29,7 +28,7 @@ public class ForStatement extends BlockStatement {
             body.assignVariable(controlVariableName, counter);
         }
         if (hasEnded()) {
-            throw new ExecutionEndedException();
+            return;
         }
 
         if (body.hasEnded()) {
@@ -50,6 +49,7 @@ public class ForStatement extends BlockStatement {
         if (hasEnded()) {
             return Optional.empty();
         }
+
         Optional<Statement> bodyStatement = body.getCurrentStatement();
         if (bodyStatement.isEmpty()) {
             return Optional.of(this);
