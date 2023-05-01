@@ -12,7 +12,7 @@ public class CodeBlock extends BlockStatement {
     
     public CodeBlock(CodeBlock containingBlock) {
         super(containingBlock);
-        this.variables = new HashMap<>();
+        this.variables = new TreeMap<>();
         this.statements = new ArrayList<>();
         this.instructionPointer = 0;
     }
@@ -32,7 +32,9 @@ public class CodeBlock extends BlockStatement {
     }
 
     public void assignVariable(String name, Integer value) {
-        assignVariable(name, value, true);
+        Optional<CodeBlock> closestDeclaration = getClosestDeclaration(name);
+        closestDeclaration.ifPresentOrElse((codeBlock) -> codeBlock.assignVariable(name, value, true),
+                () -> declareVariable(name, value));
     }
 
     public void addStatement(Statement newStatement) {
@@ -72,8 +74,18 @@ public class CodeBlock extends BlockStatement {
         if (!force && variables.containsKey(name)) {
             throw new IllegalNameException("redeclaration of variable " + name);
         }
-
         variables.put(name, value);
+    }
+
+    private Optional<CodeBlock> getClosestDeclaration(String varName) {
+        if (variables.containsKey(varName)) {
+            return Optional.of(this);
+        }
+        if (context == null) {
+            return Optional.empty();
+        }
+
+        return context.getClosestDeclaration(varName);
     }
 
     @Override
@@ -85,7 +97,7 @@ public class CodeBlock extends BlockStatement {
         Statement next = statements.get(instructionPointer);
         next.executeOne();
         if (next instanceof BlockStatement) {
-            // if BlockStatement hasn't finished execution, don't increase the instruction pointer
+            // if BlockStatement hasn't finished yet, don't increase the instruction pointer
             instructionPointer += Boolean.compare(((BlockStatement) next).hasEnded(), false);
         } else {
             instructionPointer++;
