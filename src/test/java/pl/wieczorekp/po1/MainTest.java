@@ -17,22 +17,22 @@ class MainTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {30})
-    void executeSampleProgram(int n) {
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 30, 1337, 10_000})
+    void givenPrimesSampleProgramShouldCalculateThePrimesUpToNCorrectly(int n) {
         // given
-        sampleProgramTest(n);
+        primesUpToN(n);
         String expected = output.toString();
         output.reset();
 
         // when
-        Main.executeSampleProgram();
+        Main.sampleProgramPrimes(n);
         String actual = output.toString();
 
         // then
         assertEquals(expected, actual);
     }
 
-    public static void sampleProgramTest(int n) {
+    private static void primesUpToN(int n) {
         for (int k = 0; k < n-1; k++) {
             int p = 1;
             k = k+2;

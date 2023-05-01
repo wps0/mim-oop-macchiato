@@ -26,7 +26,7 @@ import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ZERO_
 
 public class Main {
 
-    public static void executeSampleProgram() {
+    public static void sampleProgramPrimes(int ub) {
         // begin block
         CodeBlock root = new CodeBlock(null);
 
@@ -34,7 +34,7 @@ public class Main {
         VariableExpression nVar = new VariableExpression("n");
         AssignmentStatement n30 = new AssignmentStatement(root,
                 "n",
-                new LiteralExpression(30));
+                new LiteralExpression(ub));
         root.addStatement(n30);
 
         // for k n-1
@@ -98,7 +98,43 @@ public class Main {
         program.execute();
     }
 
+    public static void executeSampleLoop() {
+        CodeBlock root = new CodeBlock(null);
+
+        CodeBlock forBody = new CodeBlock(root);
+        ForStatement forLoop = new ForStatement(root, "i", new LiteralExpression(5), forBody);
+        root.addStatement(forLoop);
+
+        forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
+        forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
+
+        Execution e = new Execution(root);
+        e.execute();
+    }
+
+    public static void executeSampleNestedLoop() {
+        CodeBlock root = new CodeBlock(null);
+
+        CodeBlock forBody = new CodeBlock(root);
+        ForStatement forLoop = new ForStatement(root, "i", new LiteralExpression(5), forBody);
+        root.addStatement(forLoop);
+
+        forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
+
+        CodeBlock nestedForBody = new CodeBlock(forBody);
+        ForStatement nestedForLoop = new ForStatement(forBody, "j", new SumExpression(new LiteralExpression(1), new VariableExpression("i")), nestedForBody);
+        forBody.addStatement(nestedForLoop);;
+
+        nestedForBody.addStatement(new PrintStatement(nestedForBody, new SumExpression(new LiteralExpression(10), new VariableExpression("j"))));
+
+
+        Execution e = new Execution(root);
+        e.execute();
+    }
+
     public static void main(String[] args) {
-        executeSampleProgram();
+        sampleProgramPrimes(30);
+        executeSampleLoop();
+        executeSampleNestedLoop();
     }
 }

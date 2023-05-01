@@ -52,6 +52,8 @@ public class IfStatement extends BlockStatement {
                 branch = Branch.EXECUTION_FINISHED;
                 executionBranch.setInstructionPointer(0);
             }
+        } else {
+            branch = Branch.EXECUTION_FINISHED;
         }
     }
 
