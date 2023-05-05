@@ -1,7 +1,7 @@
 package pl.wieczorekp.po1.instructions.statements;
 
 public abstract class Statement {
-    protected CodeBlock context;
+    protected final CodeBlock context;
     protected Statement(CodeBlock context) {
         this.context = context;
     }

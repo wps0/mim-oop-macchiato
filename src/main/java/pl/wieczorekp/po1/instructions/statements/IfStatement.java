@@ -1,8 +1,8 @@
 package pl.wieczorekp.po1.instructions.statements;
 
-import lombok.NonNull;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
@@ -18,13 +18,13 @@ public class IfStatement extends BlockStatement {
                        Expression leftOperand,
                        Expression rightOperand,
                        Condition condition,
-                       @NonNull CodeBlock ifBranchBlock,
+                       CodeBlock ifBranchBlock,
                        CodeBlock elseBranchBlock) {
         super(context);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
         this.condition = condition;
-        this.ifBranchBlock = ifBranchBlock;
+        this.ifBranchBlock = Objects.requireNonNull(ifBranchBlock);
         this.elseBranchBlock = elseBranchBlock;
         this.branch = Branch.CONDITION;
     }

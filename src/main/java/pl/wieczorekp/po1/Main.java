@@ -20,13 +20,13 @@ import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ZERO_
  *  - overloaded methods (overloaded from classes other than Object; overloaded from Object class)
  *  - nested classes
  *  - nested enums
- * All of the blocks should be ordered by visibility (namely: public, protected, package-private, private)
+ * All the blocks should be ordered by visibility (namely: public, protected, package-private, private)
  *
  */
 
 public class Main {
 
-    public static void sampleProgramPrimes(int ub) {
+    public static CodeBlock sampleProgramPrimes(int ub) {
         // begin block
         CodeBlock root = new CodeBlock(null);
 
@@ -94,8 +94,7 @@ public class Main {
         // print k
         ifPEq0Branch.addStatement(new PrintStatement(ifPEq0Branch, kVar));
 
-        DebuggerExecution program = new DebuggerExecution(root);
-        program.run();
+        return root;
     }
 
     public static void executeSampleLoop() {
@@ -133,7 +132,10 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        sampleProgramPrimes(30);
+//        Execution program = new Execution(sampleProgramPrimes(30));
+//        program.run();
+        DebuggerExecution program = new DebuggerExecution(sampleProgramPrimes(30));
+        program.run();
 //        executeSampleLoop();
 //        executeSampleNestedLoop();
     }
