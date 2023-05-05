@@ -39,28 +39,6 @@ public class DebuggerExecution extends Execution {
         frame();
     }
 
-    public void display(int maxScope) {
-        Optional<Statement> currentStatement = code.getCurrentStatement(false);
-        if (currentStatement.isEmpty()) {
-            throw new ExecutionEndedException("no statement is being executed");
-        }
-
-        Map<String, Integer> vars = currentStatement.get().getContext().getVariables();
-        CodeBlock block = currentStatement.get().getContext();
-        while (maxScope >= 0 && block != null) {
-            block.getVariables().forEach(vars::putIfAbsent);
-
-            maxScope--;
-            block = block.getContext();
-        }
-
-        if (maxScope >= 0) {
-            System.out.println("The instruction is not nested that deep");
-        }
-        System.out.println("Variables:");
-        vars.forEach((var, val) -> System.out.printf("%-16s: %d\n", var, val));
-    }
-
     public void frame() {
         Optional<Statement> currentStatement = code.getCurrentStatement(false);
         String frame = currentStatement.isPresent() ? currentStatement.get().toString() : "[unknown]";
@@ -121,7 +99,7 @@ public class DebuggerExecution extends Execution {
                 switch (cmd) {
                     case "c", "continue" -> continueExecution();
                     case "s", "step" -> executeOneArgCmd(this::step, arg);
-                    case "d", "display" -> executeOneArgCmd(this::display, arg);
+                    case "d", "display" -> executeOneArgCmd((i) -> displayVariables(i, System.out), arg);
                     case "f", "frame" -> frame();
                     case "h", "help" -> help();
                     case "e", "exit" -> exit();
