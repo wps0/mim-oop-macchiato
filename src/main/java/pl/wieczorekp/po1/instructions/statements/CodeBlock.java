@@ -19,13 +19,7 @@ public class CodeBlock extends BlockStatement {
     }
 
     public Optional<Integer> lookupVariable(String name) {
-        if (variables.containsKey(name)) {
-            return Optional.of(variables.get(name));
-        }
-        if (getContext() == null) {
-            return Optional.empty();
-        }
-        return getContext().lookupVariable(name);
+        return getClosestDeclaration(name).map(codeBlock -> codeBlock.getVariables().get(name));
     }
 
     public void declareVariable(String name, Integer value) {

@@ -66,15 +66,10 @@ public class ForStatement extends BlockStatement {
 
     @Override
     public Optional<Statement> getCurrentStatement(boolean shiftIP) {
-        if (hasEnded()) {
-            return Optional.empty();
-        }
-
-        Optional<Statement> bodyStatement = body.getCurrentStatement(shiftIP);
-        if (bodyStatement.isEmpty()) {
+        if (loopState != State.EXECUTING) {
             return Optional.of(this);
         }
-        return bodyStatement;
+        return body.getCurrentStatement(shiftIP);
     }
 
     @Override

@@ -64,13 +64,10 @@ public class IfStatement extends BlockStatement {
 
     @Override
     public Optional<Statement> getCurrentStatement(boolean shiftIP) {
-        if (hasEnded()) {
-            return Optional.empty();
-        }
-        if (branch == Branch.CONDITION) {
+        if (branch == Branch.CONDITION || hasEnded()) {
             return Optional.of(this);
         }
-        return getExecutionBranch() == null ? Optional.empty() : getExecutionBranch().getCurrentStatement(shiftIP);
+        return getExecutionBranch() == null ? Optional.of(this) : getExecutionBranch().getCurrentStatement(shiftIP);
     }
 
     @Override
