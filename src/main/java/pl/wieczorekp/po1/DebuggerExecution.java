@@ -16,6 +16,8 @@ public class DebuggerExecution extends Execution {
 
     public void continueExecution() {
         super.execute();
+        System.out.println("Program finished");
+        System.exit(0);
     }
 
     public void step(int steps) {
@@ -32,7 +34,7 @@ public class DebuggerExecution extends Execution {
     public void display(int maxScope) {
         Optional<Statement> currentStatement = code.getCurrentStatement(false);
         if (currentStatement.isEmpty()) {
-            throw new NoSuchElementException("no statement is being executed");
+            throw new ExecutionEndedException("no statement is being executed");
         }
 
         Map<String, Integer> vars = currentStatement.get().getContext().getVariables();
@@ -56,7 +58,7 @@ public class DebuggerExecution extends Execution {
     }
 
     @Override
-    public void execute() {
+    protected void execute() {
         System.out.println(" -------------------------------------- ");
         System.out.printf("%29s\n", "MACCHIATO DEBUGGER");
         System.out.println(" -------------------------------------- ");

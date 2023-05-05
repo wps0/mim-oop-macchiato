@@ -12,9 +12,9 @@ public class Execution {
         this.code = code;
     }
 
-    public void execute() {
+    public void run() {
         try {
-            code.execute();
+            execute();
         } catch (Exception e) {
             Optional<Statement> cause = code.getCurrentStatement(true);
             System.err.printf("""
@@ -29,7 +29,12 @@ public class Execution {
                     e.getMessage(),
                     cause.isEmpty() ? "unknown" : code.toString());
             e.printStackTrace();
+        } finally {
+            System.out.println("Program finished");
         }
-        System.out.println("Program finished");
+    }
+
+    protected void execute() {
+        code.execute();
     }
 }

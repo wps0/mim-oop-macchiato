@@ -3,8 +3,8 @@ package pl.wieczorekp.po1.instructions.statements;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
 
 public class AssignmentStatement extends Statement {
-    private String varName;
-    private Expression value;
+    protected String varName;
+    protected Expression value;
 
     public AssignmentStatement(CodeBlock context, String varName, Expression value) {
         super(context);
@@ -19,6 +19,6 @@ public class AssignmentStatement extends Statement {
 
     @Override
     public String toString() {
-        return "var " + varName + " := " + value;
+        return varName + " := " + value;
     }
 }

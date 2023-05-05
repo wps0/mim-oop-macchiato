@@ -2,6 +2,7 @@ package pl.wieczorekp.po1.instructions.statements;
 
 import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.IllegalNameException;
+import pl.wieczorekp.po1.instructions.UndefinedVariableException;
 
 import java.util.*;
 
@@ -33,8 +34,7 @@ public class CodeBlock extends BlockStatement {
 
     public void assignVariable(String name, Integer value) {
         Optional<CodeBlock> closestDeclaration = getClosestDeclaration(name);
-        closestDeclaration.ifPresentOrElse((codeBlock) -> codeBlock.assignVariable(name, value, true),
-                () -> declareVariable(name, value));
+        closestDeclaration.orElseThrow(UndefinedVariableException::new).assignVariable(name, value, true);
     }
 
     public void addStatement(Statement newStatement) {
@@ -78,14 +78,17 @@ public class CodeBlock extends BlockStatement {
     }
 
     private Optional<CodeBlock> getClosestDeclaration(String varName) {
-        if (variables.containsKey(varName)) {
-            return Optional.of(this);
-        }
-        if (context == null) {
-            return Optional.empty();
+        CodeBlock curBlock = this;
+
+        while (curBlock != null) {
+            if (curBlock.getVariables().containsKey(varName)) {
+                return Optional.of(curBlock);
+            }
+
+            curBlock = curBlock.getContext();
         }
 
-        return context.getClosestDeclaration(varName);
+        return Optional.empty();
     }
 
     @Override

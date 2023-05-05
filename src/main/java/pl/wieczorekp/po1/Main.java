@@ -32,7 +32,7 @@ public class Main {
 
         // var n 30
         VariableExpression nVar = new VariableExpression("n");
-        AssignmentStatement n30 = new AssignmentStatement(root,
+        AssignmentStatement n30 = new VariableDeclarationStatement(root,
                 "n",
                 new LiteralExpression(ub));
         root.addStatement(n30);
@@ -49,7 +49,7 @@ public class Main {
         // begin block
         // var p 1
         VariableExpression pVar = new VariableExpression("p");
-        AssignmentStatement p1 = new AssignmentStatement(forBody, "p", ONE_LITERAL);
+        AssignmentStatement p1 = new VariableDeclarationStatement(forBody, "p", ONE_LITERAL);
         forBody.addStatement(p1);
 
         // k := k+2
@@ -94,8 +94,8 @@ public class Main {
         // print k
         ifPEq0Branch.addStatement(new PrintStatement(ifPEq0Branch, kVar));
 
-        Execution program = new Execution(root);
-        program.execute();
+        DebuggerExecution program = new DebuggerExecution(root);
+        program.run();
     }
 
     public static void executeSampleLoop() {
@@ -109,7 +109,7 @@ public class Main {
         forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
 
         Execution e = new Execution(root);
-        e.execute();
+        e.run();
     }
 
     public static void executeSampleNestedLoop() {
@@ -129,12 +129,12 @@ public class Main {
 
 
         Execution e = new Execution(root);
-        e.execute();
+        e.run();
     }
 
     public static void main(String[] args) {
         sampleProgramPrimes(30);
-        executeSampleLoop();
-        executeSampleNestedLoop();
+//        executeSampleLoop();
+//        executeSampleNestedLoop();
     }
 }

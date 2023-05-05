@@ -34,7 +34,7 @@ public class ForStatement extends BlockStatement {
 
     private void beginNewIteration() {
         body.resetVariables();
-        body.assignVariable(controlVariableName, counter);
+        body.declareVariable(controlVariableName, counter);
         body.setInstructionPointer(0);
     }
 
