@@ -7,8 +7,8 @@ import pl.wieczorekp.po1.instructions.UndefinedVariableException;
 import java.util.*;
 
 public class CodeBlock extends BlockStatement {
-    private Map<String, Integer> variables;
-    private List<Statement> statements;
+    private final Map<String, Integer> variables;
+    private final List<Statement> statements;
     private int instructionPointer;
     
     public CodeBlock(CodeBlock containingBlock) {

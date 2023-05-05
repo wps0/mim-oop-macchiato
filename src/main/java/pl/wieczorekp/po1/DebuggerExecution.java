@@ -4,7 +4,10 @@ import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.statements.CodeBlock;
 import pl.wieczorekp.po1.instructions.statements.Statement;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;

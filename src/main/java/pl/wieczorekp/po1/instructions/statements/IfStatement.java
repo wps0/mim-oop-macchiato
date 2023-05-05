@@ -7,11 +7,11 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 
 public class IfStatement extends BlockStatement {
-    private Expression leftOperand;
-    private Expression rightOperand;
-    private Condition condition;
-    private CodeBlock ifBranchBlock;
-    private CodeBlock elseBranchBlock;
+    private final Expression leftOperand;
+    private final Expression rightOperand;
+    private final Condition condition;
+    private final CodeBlock ifBranchBlock;
+    private final CodeBlock elseBranchBlock;
     private Branch branch;
 
     public IfStatement(CodeBlock context,

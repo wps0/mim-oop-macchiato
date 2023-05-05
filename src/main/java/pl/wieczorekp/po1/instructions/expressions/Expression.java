@@ -2,8 +2,6 @@ package pl.wieczorekp.po1.instructions.expressions;
 
 import pl.wieczorekp.po1.instructions.statements.CodeBlock;
 
-import java.util.Optional;
-
 /**
  * Expressions are evaluated lazily.
  */

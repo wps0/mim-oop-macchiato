@@ -6,7 +6,7 @@ import pl.wieczorekp.po1.instructions.statements.CodeBlock;
 
 public class VariableExpression implements Expression {
     @Getter
-    private String name;
+    private final String name;
 
     public VariableExpression(String name) {
         this.name = name;

@@ -3,7 +3,7 @@ package pl.wieczorekp.po1.instructions.statements;
 import pl.wieczorekp.po1.instructions.expressions.Expression;
 
 public class PrintStatement extends Statement {
-    private Expression message;
+    private final Expression message;
 
     public PrintStatement(CodeBlock context, Expression message) {
         super(context);

@@ -40,6 +40,7 @@ class MainTest {
                 i += 2;
                 if (k % i == 0) {
                     p = 0;
+                    break;
                 }
                 // fors in Macchiato reset the control variable at the beginning of each loop
                 i -= 2;

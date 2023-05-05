@@ -123,7 +123,7 @@ public class Main {
 
         CodeBlock nestedForBody = new CodeBlock(forBody);
         ForStatement nestedForLoop = new ForStatement(forBody, "j", new SumExpression(new LiteralExpression(1), new VariableExpression("i")), nestedForBody);
-        forBody.addStatement(nestedForLoop);;
+        forBody.addStatement(nestedForLoop);
 
         nestedForBody.addStatement(new PrintStatement(nestedForBody, new SumExpression(new LiteralExpression(10), new VariableExpression("j"))));
 
