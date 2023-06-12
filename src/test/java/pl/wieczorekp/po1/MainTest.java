@@ -25,7 +25,8 @@ class MainTest {
         output.reset();
 
         // when
-        Main.sampleProgramPrimes(n);
+        Execution e = new Execution(Main.sampleProgramPrimes(n));
+        e.run();
         String actual = output.toString();
 
         // then
