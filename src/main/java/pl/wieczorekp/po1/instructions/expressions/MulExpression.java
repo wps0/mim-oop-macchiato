@@ -16,4 +16,8 @@ public class MulExpression extends TwoArgsExpression {
     public String toString() {
         return lop + " * " + rop;
     }
+
+    public static MulExpression of(Expression lop, Expression rop) {
+        return new MulExpression(lop, rop);
+    }
 }

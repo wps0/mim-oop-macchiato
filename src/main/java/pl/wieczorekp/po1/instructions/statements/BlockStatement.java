@@ -15,4 +15,8 @@ public abstract class BlockStatement extends Statement {
             executeOne();
         }
     }
+
+    public void setContext(CodeBlock context) {
+        this.context = context;
+    }
 }

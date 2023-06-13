@@ -16,4 +16,8 @@ public class DivExpression extends TwoArgsExpression {
     public String toString() {
         return lop + " / " + rop;
     }
+
+    public static DivExpression of(Expression lop, Expression rop) {
+        return new DivExpression(lop, rop);
+    }
 }

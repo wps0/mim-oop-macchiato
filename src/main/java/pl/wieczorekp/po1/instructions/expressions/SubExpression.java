@@ -16,4 +16,8 @@ public class SubExpression extends TwoArgsExpression {
     public String toString() {
         return lop + " - " + rop;
     }
+
+    public static SubExpression of(Expression lop, Expression rop) {
+        return new SubExpression(lop, rop);
+    }
 }

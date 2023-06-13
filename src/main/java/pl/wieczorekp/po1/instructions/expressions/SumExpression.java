@@ -16,4 +16,8 @@ public class SumExpression extends TwoArgsExpression {
     public String toString() {
         return lop + " + " + rop;
     }
+
+    public static SumExpression of(Expression lop, Expression rop) {
+        return new SumExpression(lop, rop);
+    }
 }

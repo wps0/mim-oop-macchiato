@@ -1,8 +1,11 @@
 package pl.wieczorekp.po1;
 
+import pl.wieczorekp.po1.builders.BlockBuilder;
 import pl.wieczorekp.po1.instructions.expressions.*;
 import pl.wieczorekp.po1.instructions.statements.*;
 import pl.wieczorekp.po1.instructions.statements.IfStatement.Condition;
+
+import java.util.List;
 
 import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ONE_LITERAL;
 import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ZERO_LITERAL;
@@ -128,6 +131,28 @@ public class Main {
 
 
         Execution e = new Execution(root);
+        e.run();
+    }
+
+    public static void executeSampleProgramContainingProcedures() {
+        Execution e = new Execution(new BlockBuilder()
+                .declareVariable("x", LiteralExpression.of(101))
+                .declareVariable("y", LiteralExpression.of(1))
+                .declareProcedure("out", List.of("a"), new BlockBuilder()
+                        .print(SumExpression.of(VariableExpression.named("a"), VariableExpression.named("x")))
+                        .build()
+                )
+                .assign("x", SubExpression.of(VariableExpression.named("x"), VariableExpression.named("y")))
+                .invoke("out", List.of(VariableExpression.named("x")))
+                .invoke("out", List.of(LiteralExpression.of(100)))
+                .block(new BlockBuilder()
+                        .declareVariable("x", LiteralExpression.of(10))
+                        .invoke("out", List.of(LiteralExpression.of(100)))
+                        .build()
+                )
+                .build()
+        );
+
         e.run();
     }
 

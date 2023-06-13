@@ -16,4 +16,8 @@ public class ModExpression extends TwoArgsExpression {
     public String toString() {
         return lop + " % " + rop;
     }
+
+    public static ModExpression of(Expression lop, Expression rop) {
+        return new ModExpression(lop, rop);
+    }
 }

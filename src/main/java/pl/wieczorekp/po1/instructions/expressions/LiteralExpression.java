@@ -20,4 +20,8 @@ public class LiteralExpression implements Expression {
     public String toString() {
         return literal.toString();
     }
+
+    public static LiteralExpression of(Integer literal) {
+        return new LiteralExpression(literal);
+    }
 }

@@ -14,4 +14,8 @@ public record VariableExpression(String name) implements Expression {
     public String toString() {
         return "var " + name;
     }
+
+    public static VariableExpression named(String name) {
+        return new VariableExpression(name);
+    }
 }
