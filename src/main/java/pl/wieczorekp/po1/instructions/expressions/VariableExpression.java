@@ -12,7 +12,7 @@ public record VariableExpression(String name) implements Expression {
 
     @Override
     public String toString() {
-        return "var " + name;
+        return name;
     }
 
     public static VariableExpression named(String name) {

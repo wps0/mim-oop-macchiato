@@ -2,24 +2,34 @@ package pl.wieczorekp.po1.instructions.statements;
 
 import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.IllegalNameException;
-import pl.wieczorekp.po1.instructions.UndefinedVariableException;
+import pl.wieczorekp.po1.instructions.UndefinedIdentifierException;
 
 import java.util.*;
+import java.util.function.BiPredicate;
 
 public class CodeBlock extends BlockStatement {
+    private static final BiPredicate<CodeBlock, String> VARIABLE_TEST;
+    private static final BiPredicate<CodeBlock, String> FUNCTION_TEST;
     private final Map<String, Integer> variables;
-    private final List<Statement> statements;
+    private final Map<String, FunctionStatement> functions;
+    private final LinkedList<Statement> statements;
     private int instructionPointer;
-    
+
+    static {
+        VARIABLE_TEST = (block, id) -> block.getVariables().containsKey(id);
+        FUNCTION_TEST = (block, id) -> block.getFunctions().containsKey(id);
+    }
+
     public CodeBlock(CodeBlock containingBlock) {
         super(containingBlock);
         this.variables = new TreeMap<>();
-        this.statements = new ArrayList<>();
+        this.functions = new TreeMap<>();
+        this.statements = new LinkedList<>();
         this.instructionPointer = 0;
     }
 
     public Optional<Integer> lookupVariable(String name) {
-        return getClosestDeclaration(name).map(codeBlock -> codeBlock.getVariables().get(name));
+        return getClosestDeclaration(VARIABLE_TEST, name).map(codeBlock -> codeBlock.getVariables().get(name));
     }
 
     public void declareVariable(String name, Integer value) {
@@ -27,16 +37,36 @@ public class CodeBlock extends BlockStatement {
     }
 
     public void assignVariable(String name, Integer value) {
-        Optional<CodeBlock> closestDeclaration = getClosestDeclaration(name);
-        closestDeclaration.orElseThrow(UndefinedVariableException::new).assignVariable(name, value, true);
+        Optional<CodeBlock> closestDeclaration = getClosestDeclaration(VARIABLE_TEST, name);
+        closestDeclaration.orElseThrow(UndefinedIdentifierException::new).assignVariable(name, value, true);
     }
 
-    public void addStatement(Statement newStatement) {
+    public Optional<FunctionStatement> lookupFunction(String name) {
+        return getClosestDeclaration(FUNCTION_TEST, name).map(codeBlock -> codeBlock.getFunctions().get(name));
+    }
+
+    public void declareFunction(String identifier, FunctionStatement function) {
+        if (functions.containsKey(identifier)) {
+            throw new IllegalNameException("Function " + identifier + " is already defined in this block.");
+        }
+
+        functions.put(identifier, function);
+    }
+
+    public void prependStatement(Statement newStatement) {
+        statements.addFirst(newStatement);
+    }
+
+    public void appendStatement(Statement newStatement) {
         statements.add(newStatement);
     }
 
     public Map<String, Integer> getVariables() {
         return variables;
+    }
+
+    public Map<String, FunctionStatement> getFunctions() {
+        return functions;
     }
 
     public void resetVariables() {
@@ -71,11 +101,11 @@ public class CodeBlock extends BlockStatement {
         variables.put(name, value);
     }
 
-    private Optional<CodeBlock> getClosestDeclaration(String varName) {
+    private Optional<CodeBlock> getClosestDeclaration(BiPredicate<CodeBlock, String> doesBlockContain, String identifier) {
         CodeBlock curBlock = this;
 
         while (curBlock != null) {
-            if (curBlock.getVariables().containsKey(varName)) {
+            if (doesBlockContain.test(curBlock, identifier)) {//curBlock.getVariables().containsKey
                 return Optional.of(curBlock);
             }
 

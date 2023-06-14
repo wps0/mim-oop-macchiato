@@ -13,42 +13,46 @@ public class BlockBuilder {
     }
 
     public BlockBuilder declareVariable(String name, Expression value) {
-        context.addStatement(new VariableDeclarationStatement(context, name, value));
+        context.appendStatement(new VariableDeclarationStatement(context, name, value));
         return this;
     }
 
     public BlockBuilder assign(String symbol, Expression value) {
-        context.addStatement(new AssignmentStatement(context, symbol, value));
+        context.appendStatement(new AssignmentStatement(context, symbol, value));
         return this;
     }
 
     public BlockBuilder declareProcedure(String name, List<String> params, CodeBlock body) {
-        throw new UnsupportedOperationException("to be implemented");
+        body.setContext(context);
+        context.appendStatement(new FunctionStatement(context, name, params, body));
+        return this;
     }
 
     public BlockBuilder invoke(String name, List<Expression> params) {
-        throw new UnsupportedOperationException("to be implemented");
+        context.appendStatement(new InvocationStatement(context, name, params));
+        return this;
     }
 
     public BlockBuilder loop(String i, Expression repetitions, CodeBlock body) {
-        context.addStatement(new ForStatement(context, i, repetitions, body));
+        body.setContext(context);
+        context.appendStatement(new ForStatement(context, i, repetitions, body));
         return this;
     }
 
     public BlockBuilder condition(IfStatement ifStatement) {
         ifStatement.setContext(context);
-        context.addStatement(ifStatement);
+        context.appendStatement(ifStatement);
         return this;
     }
 
     public BlockBuilder block(CodeBlock block) {
         block.setContext(context);
-        context.addStatement(block);
+        context.appendStatement(block);
         return this;
     }
 
     public BlockBuilder print(Expression message) {
-        context.addStatement(new PrintStatement(context, message));
+        context.appendStatement(new PrintStatement(context, message));
         return this;
     }
 

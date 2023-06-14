@@ -38,7 +38,7 @@ public class Main {
         AssignmentStatement n30 = new VariableDeclarationStatement(root,
                 "n",
                 new LiteralExpression(ub));
-        root.addStatement(n30);
+        root.appendStatement(n30);
 
         // for k n-1
         CodeBlock forBody = new CodeBlock(root);
@@ -47,18 +47,18 @@ public class Main {
                 "k",
                 new SubExpression(nVar, new LiteralExpression(1)),
                 forBody);
-        root.addStatement(forKN);
+        root.appendStatement(forKN);
 
         // begin block
         // var p 1
         VariableExpression pVar = new VariableExpression("p");
         AssignmentStatement p1 = new VariableDeclarationStatement(forBody, "p", ONE_LITERAL);
-        forBody.addStatement(p1);
+        forBody.appendStatement(p1);
 
         // k := k+2
         AssignmentStatement kPlus2 = new AssignmentStatement(forBody, "k", new SumExpression(kVar,
                 new LiteralExpression(2)));
-        forBody.addStatement(kPlus2);
+        forBody.appendStatement(kPlus2);
 
         // for i k-2
         CodeBlock forIKSub2Body = new CodeBlock(forBody);
@@ -67,13 +67,13 @@ public class Main {
                 "i",
                 new SubExpression(kVar, new LiteralExpression(2)),
                 forIKSub2Body);
-        forBody.addStatement(forIKSub2);
+        forBody.appendStatement(forIKSub2);
 
         // i := i+2
         AssignmentStatement iEqIPlus2 = new AssignmentStatement(forIKSub2Body,
                 "i",
                 new SumExpression(iVar, new LiteralExpression(2)));
-        forIKSub2Body.addStatement(iEqIPlus2);
+        forIKSub2Body.appendStatement(iEqIPlus2);
 
         // if k % i == 0
         ModExpression kModI = new ModExpression(kVar, iVar);
@@ -84,18 +84,18 @@ public class Main {
                 Condition.EQ,
                 ifKModIBranchBlock,
                 null);
-        forIKSub2Body.addStatement(ifKModI);
+        forIKSub2Body.appendStatement(ifKModI);
 
         // p := 0
-        ifKModIBranchBlock.addStatement(new AssignmentStatement(ifKModIBranchBlock, "p", ZERO_LITERAL));
+        ifKModIBranchBlock.appendStatement(new AssignmentStatement(ifKModIBranchBlock, "p", ZERO_LITERAL));
 
         // if p == 0
         CodeBlock ifPEq0Branch = new CodeBlock(forBody);
         IfStatement ifPEq0 = new IfStatement(forBody, pVar, ONE_LITERAL, Condition.EQ, ifPEq0Branch, null);
-        forBody.addStatement(ifPEq0);
+        forBody.appendStatement(ifPEq0);
 
         // print k
-        ifPEq0Branch.addStatement(new PrintStatement(ifPEq0Branch, kVar));
+        ifPEq0Branch.appendStatement(new PrintStatement(ifPEq0Branch, kVar));
 
         return root;
     }
@@ -105,10 +105,10 @@ public class Main {
 
         CodeBlock forBody = new CodeBlock(root);
         ForStatement forLoop = new ForStatement(root, "i", new LiteralExpression(5), forBody);
-        root.addStatement(forLoop);
+        root.appendStatement(forLoop);
 
-        forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
-        forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
+        forBody.appendStatement(new PrintStatement(forBody, new VariableExpression("i")));
+        forBody.appendStatement(new PrintStatement(forBody, new VariableExpression("i")));
 
         Execution e = new Execution(root);
         e.run();
@@ -119,15 +119,15 @@ public class Main {
 
         CodeBlock forBody = new CodeBlock(root);
         ForStatement forLoop = new ForStatement(root, "i", new LiteralExpression(5), forBody);
-        root.addStatement(forLoop);
+        root.appendStatement(forLoop);
 
-        forBody.addStatement(new PrintStatement(forBody, new VariableExpression("i")));
+        forBody.appendStatement(new PrintStatement(forBody, new VariableExpression("i")));
 
         CodeBlock nestedForBody = new CodeBlock(forBody);
         ForStatement nestedForLoop = new ForStatement(forBody, "j", new SumExpression(new LiteralExpression(1), new VariableExpression("i")), nestedForBody);
-        forBody.addStatement(nestedForLoop);
+        forBody.appendStatement(nestedForLoop);
 
-        nestedForBody.addStatement(new PrintStatement(nestedForBody, new SumExpression(new LiteralExpression(10), new VariableExpression("j"))));
+        nestedForBody.appendStatement(new PrintStatement(nestedForBody, new SumExpression(new LiteralExpression(10), new VariableExpression("j"))));
 
 
         Execution e = new Execution(root);
@@ -135,7 +135,7 @@ public class Main {
     }
 
     public static void executeSampleProgramContainingProcedures() {
-        Execution e = new Execution(new BlockBuilder()
+        Execution e = new DebuggerExecution(new BlockBuilder()
                 .declareVariable("x", LiteralExpression.of(101))
                 .declareVariable("y", LiteralExpression.of(1))
                 .declareProcedure("out", List.of("a"), new BlockBuilder()
@@ -159,8 +159,9 @@ public class Main {
     public static void main(String[] args) {
 //        Execution program = new Execution(sampleProgramPrimes(30));
 //        program.run();
-        DebuggerExecution program = new DebuggerExecution(sampleProgramPrimes(30));
-        program.run();
+//        DebuggerExecution program = new DebuggerExecution(sampleProgramPrimes(30));
+//        program.run();
+        executeSampleProgramContainingProcedures();
 //        executeSampleLoop();
 //        executeSampleNestedLoop();
     }
