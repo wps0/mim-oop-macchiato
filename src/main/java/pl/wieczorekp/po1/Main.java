@@ -1,6 +1,7 @@
 package pl.wieczorekp.po1;
 
 import pl.wieczorekp.po1.builders.BlockBuilder;
+import pl.wieczorekp.po1.builders.IfBuilder;
 import pl.wieczorekp.po1.instructions.expressions.*;
 import pl.wieczorekp.po1.instructions.statements.*;
 import pl.wieczorekp.po1.instructions.statements.IfStatement.Condition;
@@ -29,7 +30,8 @@ import static pl.wieczorekp.po1.instructions.expressions.LiteralExpression.ZERO_
 
 public class Main {
 
-    public static CodeBlock sampleProgramPrimes(int ub) {
+    public static CodeBlock buildSampleProgramPrimesWithoutBuilders(int ub) {
+        // Without using builders:
         // begin block
         CodeBlock root = new CodeBlock(null);
 
@@ -96,8 +98,39 @@ public class Main {
 
         // print k
         ifPEq0Branch.appendStatement(new PrintStatement(ifPEq0Branch, kVar));
-
         return root;
+    }
+
+    public static CodeBlock buildSampleProgramPrimesWithBuilders(int ub) {
+        return new BlockBuilder()
+                .declareVariable("n", LiteralExpression.of(ub))
+                .loop("k",
+                        SubExpression.of(VariableExpression.named("n"), LiteralExpression.of(1)),
+                        new BlockBuilder()
+                                .declareVariable("p", LiteralExpression.of(1))
+                                .assign("k", SumExpression.of(VariableExpression.named("k"), LiteralExpression.of(2)))
+                                .loop("i", SubExpression.of(VariableExpression.named("k"), LiteralExpression.of(2)), new BlockBuilder()
+                                        .assign("i", SumExpression.of(VariableExpression.named("i"), LiteralExpression.of(2)))
+                                        .ifElse(new IfBuilder()
+                                                .leftOperand(ModExpression.of(VariableExpression.named("k"), VariableExpression.named("i")))
+                                                .condition(Condition.EQ)
+                                                .rightOperand(ZERO_LITERAL)
+                                                .ifTrue(new BlockBuilder()
+                                                        .assign("p", ZERO_LITERAL)
+                                                        .build())
+                                                .build())
+                                        .build())
+                                .ifElse(new IfBuilder()
+                                        .leftOperand(VariableExpression.named("p"))
+                                        .condition(Condition.EQ)
+                                        .rightOperand(ONE_LITERAL)
+                                        .ifTrue(new BlockBuilder()
+                                                .print(VariableExpression.named("k"))
+                                                .build())
+                                        .build())
+                                .build()
+                )
+                .build();
     }
 
     public static void executeSampleLoop() {
@@ -134,8 +167,8 @@ public class Main {
         e.run();
     }
 
-    public static void executeSampleProgramContainingProcedures() {
-        Execution e = new DebuggerExecution(new BlockBuilder()
+    public static CodeBlock buildSampleProgramContainingProcedures() {
+        return new BlockBuilder()
                 .declareVariable("x", LiteralExpression.of(101))
                 .declareVariable("y", LiteralExpression.of(1))
                 .declareProcedure("out", List.of("a"), new BlockBuilder()
@@ -150,19 +183,12 @@ public class Main {
                         .invoke("out", List.of(LiteralExpression.of(100)))
                         .build()
                 )
-                .build()
-        );
-
-        e.run();
+                .build();
     }
 
     public static void main(String[] args) {
-//        Execution program = new Execution(sampleProgramPrimes(30));
-//        program.run();
-//        DebuggerExecution program = new DebuggerExecution(sampleProgramPrimes(30));
-//        program.run();
-        executeSampleProgramContainingProcedures();
-//        executeSampleLoop();
-//        executeSampleNestedLoop();
+//        DebuggerExecution dbg = new DebuggerExecution(buildSampleProgramPrimesWithBuilders());
+        DebuggerExecution dbg = new DebuggerExecution(buildSampleProgramContainingProcedures());
+        dbg.run();
     }
 }
