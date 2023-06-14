@@ -59,6 +59,15 @@ public class IfStatement extends BlockStatement {
     }
 
     @Override
+    public void setContext(CodeBlock context) {
+        super.setContext(context);
+        ifBranchBlock.setContext(context);
+        if (elseBranchBlock != null) {
+            elseBranchBlock.setContext(context);
+        }
+    }
+
+    @Override
     public boolean hasEnded() {
         return branch == Branch.EXECUTION_FINISHED;
     }

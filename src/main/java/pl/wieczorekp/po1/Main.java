@@ -133,6 +133,24 @@ public class Main {
                 .build();
     }
 
+    public static CodeBlock buildSampleProgramContainingMultipleBlocks() {
+        return new BlockBuilder()
+                .declareVariable("a", LiteralExpression.of(1))
+                .print(VariableExpression.named("a"))
+                .declareVariable("b", LiteralExpression.of(100))
+                .block(new BlockBuilder()
+                        .declareVariable("a", LiteralExpression.of(2))
+                        .block(new BlockBuilder()
+                                .declareVariable("a", LiteralExpression.of(3))
+                                .print(VariableExpression.named("a"))
+                                .print(VariableExpression.named("b"))
+                                .build())
+                        .print(VariableExpression.named("a"))
+                        .build())
+                .print(VariableExpression.named("a"))
+                .build();
+    }
+
     public static void executeSampleLoop() {
         CodeBlock root = new CodeBlock(null);
 

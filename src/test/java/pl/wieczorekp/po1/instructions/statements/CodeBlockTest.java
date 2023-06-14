@@ -1,15 +1,39 @@
 package pl.wieczorekp.po1.instructions.statements;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.wieczorekp.po1.Execution;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static pl.wieczorekp.po1.Main.buildSampleProgramContainingMultipleBlocks;
 
 class CodeBlockTest {
     private static final String VARIABLE_A = "variable_a";
     private static final String VARIABLE_B = "variable_b";
     private static final String VARIABLE_C = "variable_c";
+    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+    @BeforeEach
+    void setUp() {
+        System.setOut(new PrintStream(output));
+    }
+
+    @Test
+    void givenSampleBlockProgramShouldManageVariablesVisibilityCorrectly() {
+        // given
+        Execution prog = new Execution(buildSampleProgramContainingMultipleBlocks());
+        final String expected = "1\n3\n100\n2\n1\nProgram finished\n";
+
+        // when
+        prog.run();
+
+        // then
+        assertEquals(expected, output.toString());
+    }
 
     @Test
     void lookupVariable_givenNonNestedContextShouldResolveTheVariableOrReturnAnEmptyOptional() {

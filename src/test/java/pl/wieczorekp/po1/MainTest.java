@@ -1,6 +1,7 @@
 package pl.wieczorekp.po1;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -8,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static pl.wieczorekp.po1.Main.buildSampleProgramContainingMultipleBlocks;
 
 class MainTest {
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -25,7 +27,7 @@ class MainTest {
         output.reset();
 
         // when
-        Execution e = new Execution(Main.sampleProgramPrimes(n));
+        Execution e = new Execution(Main.buildSampleProgramPrimesWithBuilders(n));
         e.run();
         String actual = output.toString();
 

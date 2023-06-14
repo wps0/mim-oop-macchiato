@@ -23,7 +23,7 @@ public class BlockBuilder {
     }
 
     public BlockBuilder declareProcedure(String name, List<String> params, CodeBlock body) {
-        body.setContext(context);
+        // The context of the body is dynamically changed, so setting it here is unnecessary.
         context.appendStatement(new FunctionStatement(context, name, params, body));
         return this;
     }
@@ -39,7 +39,7 @@ public class BlockBuilder {
         return this;
     }
 
-    public BlockBuilder condition(IfStatement ifStatement) {
+    public BlockBuilder ifElse(IfStatement ifStatement) {
         ifStatement.setContext(context);
         context.appendStatement(ifStatement);
         return this;

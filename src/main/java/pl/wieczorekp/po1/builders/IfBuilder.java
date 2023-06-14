@@ -5,11 +5,11 @@ import pl.wieczorekp.po1.instructions.statements.CodeBlock;
 import pl.wieczorekp.po1.instructions.statements.IfStatement;
 
 public class IfBuilder {
-    Expression leftOperand;
-    Expression rightOperand;
-    IfStatement.Condition condition;
-    CodeBlock ifBranchBlock;
-    CodeBlock elseBranchBlock;
+    private Expression leftOperand;
+    private Expression rightOperand;
+    private IfStatement.Condition condition;
+    private CodeBlock ifBranchBlock;
+    private CodeBlock elseBranchBlock;
 
     public IfBuilder() {
     }
@@ -33,7 +33,7 @@ public class IfBuilder {
         if (block == null) {
             throw new NullPointerException("If true block cannot be null");
         }
-        this.ifBranchBlock = block;
+        ifBranchBlock = block;
         return this;
     }
 
