@@ -1,9 +1,7 @@
 package pl.wieczorekp.po1.instructions.expressions;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import pl.wieczorekp.po1.instructions.UndefinedVariableException;
+import pl.wieczorekp.po1.instructions.UndefinedIdentifierException;
 import pl.wieczorekp.po1.instructions.statements.CodeBlock;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +30,6 @@ class VariableExpressionTest {
         VariableExpression variableExpression = new VariableExpression(VARIABLE_A);
 
         // when & then
-        assertThrows(UndefinedVariableException.class, () -> variableExpression.evaluateInContext(context));
+        assertThrows(UndefinedIdentifierException.class, () -> variableExpression.evaluateInContext(context));
     }
 }

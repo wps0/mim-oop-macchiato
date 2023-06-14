@@ -1,7 +1,6 @@
 package pl.wieczorekp.po1.instructions.statements;
 
 import org.junit.jupiter.api.Test;
-import pl.wieczorekp.po1.instructions.UndefinedVariableException;
 
 import java.util.Optional;
 

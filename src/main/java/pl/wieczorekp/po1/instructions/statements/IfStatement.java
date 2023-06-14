@@ -38,6 +38,7 @@ public class IfStatement extends BlockStatement {
         if (hasEnded()) {
             branch = Branch.CONDITION;
         }
+
         if (branch == Branch.CONDITION) {
             Integer exp1 = leftOperand.evaluateInContext(context);
             Integer exp2 = rightOperand.evaluateInContext(context);

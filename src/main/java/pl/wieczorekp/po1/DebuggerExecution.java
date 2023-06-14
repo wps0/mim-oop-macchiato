@@ -60,8 +60,10 @@ public class DebuggerExecution extends Execution {
                 "display the current instruction and the lines after it"));
         System.out.println(HELP_ENTRY_FORMATTER.apply("d(isplay) <max distance>",
                 "display variables accessible by the current instruction"));
-        System.out.println(HELP_ENTRY_FORMATTER.apply("s(tep) <steps>", "execute <steps> instructions"));
-        System.out.println(HELP_ENTRY_FORMATTER.apply("c(ontinue)", "continue the execution"));
+        System.out.println(HELP_ENTRY_FORMATTER.apply("s(tep) <steps>",
+                "execute <steps> instructions; if step is null, executes one instruction"));
+        System.out.println(HELP_ENTRY_FORMATTER.apply("c(ontinue)", "an alias for run"));
+        System.out.println(HELP_ENTRY_FORMATTER.apply("r(un)", "resumes the execution"));
         System.out.println(HELP_ENTRY_FORMATTER.apply("h(elp)", "display this message"));
         System.out.println(HELP_ENTRY_FORMATTER.apply("e(xit)", "terminate the program"));
     }
@@ -100,8 +102,13 @@ public class DebuggerExecution extends Execution {
                 Integer arg = lineMatcher.group(2) != null ? Integer.valueOf(lineMatcher.group(2)) : null;
 
                 switch (cmd) {
-                    case "c", "continue" -> continueExecution();
-                    case "s", "step" -> executeOneArgCmd(this::step, arg);
+                    case "c", "continue", "r", "run" -> continueExecution();
+                    case "s", "step" -> {
+                        if (arg == null) {
+                            arg = 1;
+                        }
+                        executeOneArgCmd(this::step, arg);
+                    }
                     case "d", "display" -> executeOneArgCmd((i) -> displayVariables(i, System.out), arg);
                     case "f", "frame" -> frame();
                     case "h", "help" -> help();
