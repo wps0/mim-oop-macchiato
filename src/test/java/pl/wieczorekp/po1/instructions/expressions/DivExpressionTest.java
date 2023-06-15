@@ -1,11 +1,11 @@
 package pl.wieczorekp.po1.instructions.expressions;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import pl.wieczorekp.po1.instructions.statements.CodeBlock;
+import pl.wieczorekp.macchiato.instructions.expressions.DivExpression;
+import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
+import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import java.util.stream.Stream;
 

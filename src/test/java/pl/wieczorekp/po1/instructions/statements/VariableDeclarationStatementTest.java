@@ -1,7 +1,10 @@
 package pl.wieczorekp.po1.instructions.statements;
 
 import org.junit.jupiter.api.Test;
-import pl.wieczorekp.po1.instructions.expressions.LiteralExpression;
+import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
+import pl.wieczorekp.macchiato.instructions.statements.AssignmentStatement;
+import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
+import pl.wieczorekp.macchiato.instructions.statements.VariableDeclarationStatement;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static pl.wieczorekp.po1.Utils.VARIABLE_A;

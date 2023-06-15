@@ -2,15 +2,15 @@ package pl.wieczorekp.po1.instructions.statements;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.wieczorekp.po1.instructions.expressions.LiteralExpression;
+import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
+import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
+import pl.wieczorekp.macchiato.instructions.statements.PrintStatement;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static java.lang.Integer.MIN_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.wieczorekp.po1.Utils.VARIABLE_A;
-import static pl.wieczorekp.po1.Utils.VARIABLE_B;
 
 class PrintStatementTest {
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();

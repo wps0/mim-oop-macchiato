@@ -2,14 +2,15 @@ package pl.wieczorekp.po1.instructions.statements;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.wieczorekp.po1.Execution;
+import pl.wieczorekp.macchiato.Execution;
+import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static pl.wieczorekp.po1.Main.buildSampleProgramContainingMultipleBlocks;
+import static pl.wieczorekp.macchiato.Main.buildSampleProgramContainingMultipleBlocks;
 
 class CodeBlockTest {
     private static final String VARIABLE_A = "variable_a";

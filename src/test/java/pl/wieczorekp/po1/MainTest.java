@@ -1,15 +1,15 @@
 package pl.wieczorekp.po1;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import pl.wieczorekp.macchiato.Execution;
+import pl.wieczorekp.macchiato.Main;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.wieczorekp.po1.Main.buildSampleProgramContainingMultipleBlocks;
 
 class MainTest {
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
