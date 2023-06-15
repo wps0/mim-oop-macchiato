@@ -1,13 +1,11 @@
-package pl.wieczorekp.po1.instructions.statements;
+package pl.wieczorekp.macchiato.instructions.statements;
 
 import org.junit.jupiter.api.Test;
 import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
-import pl.wieczorekp.macchiato.instructions.statements.AssignmentStatement;
-import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static pl.wieczorekp.po1.Utils.VARIABLE_A;
-import static pl.wieczorekp.po1.Utils.VARIABLE_B;
+import static pl.wieczorekp.macchiato.Utils.VARIABLE_A;
+import static pl.wieczorekp.macchiato.Utils.VARIABLE_B;
 
 class AssignmentStatementTest {
 

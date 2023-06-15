@@ -1,8 +1,7 @@
-package pl.wieczorekp.po1.instructions.expressions;
+package pl.wieczorekp.macchiato.instructions.expressions;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

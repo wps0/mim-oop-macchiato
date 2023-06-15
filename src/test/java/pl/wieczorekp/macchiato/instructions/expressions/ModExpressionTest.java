@@ -1,10 +1,8 @@
-package pl.wieczorekp.po1.instructions.expressions;
+package pl.wieczorekp.macchiato.instructions.expressions;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import pl.wieczorekp.macchiato.instructions.expressions.DivExpression;
-import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import java.util.stream.Stream;
@@ -12,8 +10,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class DivExpressionTest {
-
+class ModExpressionTest {
     @ParameterizedTest
     @MethodSource("provideTwoNonzeroIntsForEvaluateInContext")
     void givenTwoNonNullableIntegersShouldEvaluateInEmptyContext(Integer a, Integer b) {
@@ -21,13 +18,13 @@ class DivExpressionTest {
         CodeBlock context = new CodeBlock(null);
         LiteralExpression aLiteral = LiteralExpression.of(a);
         LiteralExpression bLiteral = LiteralExpression.of(b);
-        DivExpression div = DivExpression.of(aLiteral, bLiteral);
+        ModExpression exp = ModExpression.of(aLiteral, bLiteral);
 
         // when
-        Integer result = div.evaluateInContext(context);
+        Integer result = exp.evaluateInContext(context);
 
         // then
-        assertEquals(a/b, result);
+        assertEquals(a % b, result);
     }
 
     @ParameterizedTest
@@ -37,16 +34,16 @@ class DivExpressionTest {
         CodeBlock context = new CodeBlock(null);
         LiteralExpression aLiteral = LiteralExpression.of(a);
         LiteralExpression bLiteral = LiteralExpression.of(b);
-        DivExpression div = DivExpression.of(aLiteral, bLiteral);
+        ModExpression exp = ModExpression.of(aLiteral, bLiteral);
 
         // when
         if (b == null || b == 0) {
-            assertThrows(ArithmeticException.class, () -> div.evaluateInContext(context));
+            assertThrows(ArithmeticException.class, () -> exp.evaluateInContext(context));
         } else {
-            Integer result = div.evaluateInContext(context);
+            Integer result = exp.evaluateInContext(context);
 
             // then
-            assertEquals(a / b, result);
+            assertEquals(a % b, result);
         }
     }
 
@@ -73,4 +70,5 @@ class DivExpressionTest {
                 Arguments.of(330, 11)
         );
     }
+
 }

@@ -1,9 +1,8 @@
-package pl.wieczorekp.po1.instructions.statements;
+package pl.wieczorekp.macchiato.instructions.statements;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.wieczorekp.macchiato.Execution;
-import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

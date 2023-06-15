@@ -1,4 +1,4 @@
-package pl.wieczorekp.po1;
+package pl.wieczorekp.macchiato;
 
 public final class Utils {
     public static final String VARIABLE_A = "variable_a";

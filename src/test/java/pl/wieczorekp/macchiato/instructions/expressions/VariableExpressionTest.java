@@ -1,8 +1,7 @@
-package pl.wieczorekp.po1.instructions.expressions;
+package pl.wieczorekp.macchiato.instructions.expressions;
 
 import org.junit.jupiter.api.Test;
 import pl.wieczorekp.macchiato.instructions.UndefinedIdentifierException;
-import pl.wieczorekp.macchiato.instructions.expressions.VariableExpression;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
