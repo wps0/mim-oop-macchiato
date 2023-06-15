@@ -5,7 +5,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LiteralExpressionTest {
 

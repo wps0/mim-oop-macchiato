@@ -6,7 +6,7 @@ import pl.wieczorekp.macchiato.instructions.statements.AssignmentStatement;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 import pl.wieczorekp.macchiato.instructions.statements.VariableDeclarationStatement;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pl.wieczorekp.po1.Utils.VARIABLE_A;
 
 class VariableDeclarationStatementTest {

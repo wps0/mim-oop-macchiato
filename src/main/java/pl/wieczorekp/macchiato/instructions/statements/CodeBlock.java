@@ -1,10 +1,13 @@
 package pl.wieczorekp.macchiato.instructions.statements;
 
-import pl.wieczorekp.macchiato.instructions.UndefinedIdentifierException;
 import pl.wieczorekp.macchiato.instructions.ExecutionEndedException;
 import pl.wieczorekp.macchiato.instructions.IllegalNameException;
+import pl.wieczorekp.macchiato.instructions.UndefinedIdentifierException;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.BiPredicate;
 
 public class CodeBlock extends BlockStatement {

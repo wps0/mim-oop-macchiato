@@ -5,7 +5,8 @@ import pl.wieczorekp.macchiato.instructions.UndefinedIdentifierException;
 import pl.wieczorekp.macchiato.instructions.expressions.VariableExpression;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class VariableExpressionTest {
     private static final String VARIABLE_A = "variable_a";

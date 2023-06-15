@@ -1,8 +1,8 @@
 package pl.wieczorekp.macchiato.builders;
 
+import pl.wieczorekp.macchiato.instructions.expressions.Expression;
 import pl.wieczorekp.macchiato.instructions.statements.CodeBlock;
 import pl.wieczorekp.macchiato.instructions.statements.IfStatement;
-import pl.wieczorekp.macchiato.instructions.expressions.Expression;
 
 public class IfBuilder {
     private Expression leftOperand;

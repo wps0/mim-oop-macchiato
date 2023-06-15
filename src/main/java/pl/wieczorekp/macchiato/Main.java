@@ -1,11 +1,9 @@
 package pl.wieczorekp.macchiato;
 
 import pl.wieczorekp.macchiato.builders.BlockBuilder;
+import pl.wieczorekp.macchiato.builders.IfBuilder;
 import pl.wieczorekp.macchiato.instructions.expressions.*;
 import pl.wieczorekp.macchiato.instructions.statements.*;
-import pl.wieczorekp.macchiato.builders.IfBuilder;
-import pl.wieczorekp.po1.instructions.expressions.*;
-import pl.wieczorekp.po1.instructions.statements.*;
 
 import java.util.List;
 
