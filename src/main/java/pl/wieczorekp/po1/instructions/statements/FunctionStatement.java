@@ -33,6 +33,7 @@ public class FunctionStatement extends BlockStatement {
                 header.append(", ");
             }
         }
+        header.append(')');
 
         return header.toString();
     }
@@ -61,7 +62,7 @@ public class FunctionStatement extends BlockStatement {
         String prefix = "  ".repeat(context.getNestedness());
         StringBuilder asString = new StringBuilder();
         asString.append(prefix).append(getHeader());
-        asString.append("):\n").append(body);
+        asString.append(":\n").append(body);
 
         return asString.toString();
     }

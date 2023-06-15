@@ -2,9 +2,18 @@ package pl.wieczorekp.po1;
 
 import pl.wieczorekp.po1.instructions.ExecutionEndedException;
 import pl.wieczorekp.po1.instructions.statements.CodeBlock;
+import pl.wieczorekp.po1.instructions.statements.FunctionStatement;
 import pl.wieczorekp.po1.instructions.statements.Statement;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.BufferOverflowException;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -14,6 +23,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DebuggerExecution extends Execution {
+    private static final int BUFFER_SIZE = 16*1024;
     private static final BiFunction<String, String, String> HELP_ENTRY_FORMATTER;
     private static final Predicate<List<String>> NO_ARGS_VERIFICATION_STRATEGY;
     private static final Predicate<List<String>> ONE_INT_ARG_VERIFICATION_STRATEGY;
@@ -25,31 +35,26 @@ public class DebuggerExecution extends Execution {
         NO_ARGS_VERIFICATION_STRATEGY = args -> args.size() == 0;
         ONE_INT_ARG_VERIFICATION_STRATEGY = args -> {
             if (args.size() != 1) {
+                System.err.println("Wrong number of arguments.");
                 return false;
             }
 
             try {
                 Integer.valueOf(args.get(0));
             } catch (NumberFormatException e) {
+                System.err.println("Yhe first argument is not an integer.");
                 return false;
             }
             return true;
         };
         ONE_PATH_ARG_VERIFICATION_STRATEGY = args -> {
             if (args.size() != 1) {
+                System.err.println("Wrong number of arguments.");
                 return false;
             }
 
-            try {
-                File f = new File(args.get(0));
-                if (!f.exists() || !f.isFile() || !f.canRead()) {
-                    return false;
-                }
-            } catch (NullPointerException e) {
-                return false;
-            }
-
-            return true;
+            Path p = Path.of(args.get(0));
+            return Files.notExists(p) || Files.exists(p) && Files.isWritable(p) && Files.isRegularFile(p);
         };
     }
 
@@ -88,13 +93,15 @@ public class DebuggerExecution extends Execution {
         ));
         commands.add(new Command(
                 "d",
-                "display <max distance>",
+                "display",
+                List.of("max distance"),
                 "display variables accessible by the current instruction",
-                NO_ARGS_VERIFICATION_STRATEGY,
-                args -> help()
+                ONE_INT_ARG_VERIFICATION_STRATEGY,
+                args -> displayVariables(Integer.parseInt(args.get(0)), System.out)
         ));
         commands.add(new Command("s",
-                "step <steps>",
+                "step",
+                List.of("steps"),
                 "execute <steps> instructions",
                 ONE_INT_ARG_VERIFICATION_STRATEGY,
                 args -> step(Integer.parseInt(args.get(0)))));
@@ -103,6 +110,61 @@ public class DebuggerExecution extends Execution {
                 "execute 1 instruction",
                 NO_ARGS_VERIFICATION_STRATEGY,
                 args -> step(1)));
+        commands.add(new Command("m",
+                "dump",
+                List.of("path"),
+                "makes a dump of currently visible variables and procedures and saves it to the given path",
+                ONE_PATH_ARG_VERIFICATION_STRATEGY,
+                args -> {
+                    Path p = Path.of(args.get(0));
+                    try (WritableByteChannel chan = Files.newByteChannel(p, StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
+                        dump(chan);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }));
+        commands.sort(null);
+    }
+
+    private void dump(WritableByteChannel out) throws IOException {
+        ByteBuffer dumpBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+        Optional<Statement> curStatement = code.getCurrentStatement(false);
+
+        if (curStatement.isEmpty()) {
+            dumpBuffer.put("Unknown current statement".getBytes());
+            out.write(dumpBuffer);
+        } else {
+            dumpBuffer.put("Visible procedures:\n".getBytes());
+            Map<String, FunctionStatement> proc = curStatement.get().getContext().getFunctions();
+
+            Iterator<FunctionStatement> it = proc.values().iterator();
+            FunctionStatement f = null;
+            boolean overflow = false;
+            while (it.hasNext() || overflow) {
+                if (!overflow) {
+                    f = it.next();
+                }
+
+                try {
+                    dumpBuffer.put(f.getHeader().getBytes());
+                    dumpBuffer.putChar('\n');
+                    overflow = false;
+                } catch (BufferOverflowException e) {
+                    overflow = true;
+                    dumpBuffer.flip();
+                    out.write(dumpBuffer);
+                    dumpBuffer.compact();
+                }
+            }
+
+            if (dumpBuffer.remaining() != 0) {
+                dumpBuffer.flip();
+                out.write(dumpBuffer);
+                dumpBuffer.compact();
+            }
+
+            displayVariables(0, new PrintStream(Channels.newOutputStream(out)));
+        }
     }
 
     public void continueExecution() {
@@ -164,12 +226,14 @@ public class DebuggerExecution extends Execution {
         // matches strings formatted like this: <str> [arg1 arg2 ...]
         Pattern inputCmdPattern = Pattern.compile("^(\\S+)( .*)*");
         try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("# ");
             while (scanner.hasNextLine()) {
-                String line = scanner.nextLine().toLowerCase();
+                String line = scanner.nextLine();
                 Matcher lineMatcher = inputCmdPattern.matcher(line);
 
                 if (!lineMatcher.find()) {
                     System.err.println("Invalid command " + line.stripLeading().stripTrailing());
+                    System.out.print("# ");
                     continue;
                 }
                 String cmd = lineMatcher.group(1);
@@ -177,13 +241,20 @@ public class DebuggerExecution extends Execution {
                 if (lineMatcher.group(2) != null) {
                     args = List.of(lineMatcher.group(2));
                 }
+                args = args.stream()
+                        .map(s -> s.stripLeading().stripTrailing())
+                        .collect(Collectors.toList());
 
                 List<Command> matchingCommands = findMatchingCommands(cmd);
                 if (matchingCommands.isEmpty()) {
                     System.err.println("Invalid command " + cmd);
+                    System.out.print("# ");
                     continue;
                 }
+
                 executeCommand(matchingCommands, args);
+                System.out.print("# ");
+
             }
         }
     }
