@@ -19,14 +19,12 @@ public record Command(String shortCmd, String cmd, List<String> arguments, Strin
         Matcher cmdMatcher = toStringPattern.matcher(cmd);
         cmdMatcher.find();
 
-        StringBuilder rep = new StringBuilder();
-        rep.append(cmdMatcher.group(1));
-        rep.append('(').append(cmdMatcher.group(2)).append(')');
-        rep.append(cmdMatcher.group(3));
-        rep.append(" ").append(arguments.stream()
+        return cmdMatcher.group(1) +
+                '(' + cmdMatcher.group(2) + ')' +
+                cmdMatcher.group(3) +
+                " " + arguments.stream()
                 .map(s -> "[" + s + "]")
-                .reduce((s1, s2) -> s1 + " " + s2).orElse(""));
-        return rep.toString();
+                .reduce((s1, s2) -> s1 + " " + s2).orElse("");
     }
 
     @Override

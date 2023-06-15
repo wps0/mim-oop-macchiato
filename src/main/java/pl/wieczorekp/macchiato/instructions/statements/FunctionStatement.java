@@ -60,11 +60,8 @@ public class FunctionStatement extends BlockStatement {
     @Override
     public String toString() {
         String prefix = "  ".repeat(context.getNestedness());
-        StringBuilder asString = new StringBuilder();
-        asString.append(prefix).append(getHeader());
-        asString.append(":\n").append(body);
-
-        return asString.toString();
+        return prefix + getHeader() +
+                ":\n" + body;
     }
 
     public CodeBlock getBody() {

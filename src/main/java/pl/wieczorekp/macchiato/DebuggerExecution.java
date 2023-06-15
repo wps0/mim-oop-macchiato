@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -207,14 +206,6 @@ public class DebuggerExecution extends Execution {
     public void exit() {
         System.out.println("Program interrupted");
         System.exit(0);
-    }
-
-    private void executeOneArgCmd(Consumer<Integer> func, Integer arg) {
-        if (arg == null) {
-            System.err.println("Argument missing");
-            return;
-        }
-        func.accept(arg);
     }
 
     @Override
