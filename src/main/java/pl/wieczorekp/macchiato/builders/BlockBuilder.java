@@ -51,6 +51,11 @@ public class BlockBuilder {
         return this;
     }
 
+    public BlockBuilder statement(Statement s) {
+        context.appendStatement(s);
+        return this;
+    }
+
     public BlockBuilder print(Expression message) {
         context.appendStatement(new PrintStatement(context, message));
         return this;

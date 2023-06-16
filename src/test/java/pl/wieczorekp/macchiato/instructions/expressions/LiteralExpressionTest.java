@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class LiteralExpressionTest {
 
     @ParameterizedTest
-    @ValueSource(ints = {3, 0, -1, 100})
+    @ValueSource(ints = {401, 0, -133, Integer.MIN_VALUE, Integer.MAX_VALUE})
     void shouldEvaluateInEmptyContext(Integer value) {
         // given
         CodeBlock context = new CodeBlock(null);

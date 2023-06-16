@@ -1,6 +1,7 @@
 package pl.wieczorekp.macchiato;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -17,7 +18,7 @@ class MainTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 30, 1337, 10_000})
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 30, 1337, 10_000})
     void givenPrimesSampleProgramShouldCalculateThePrimesUpToNCorrectly(int n) {
         // given
         primesUpToN(n);
@@ -31,6 +32,18 @@ class MainTest {
 
         // then
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void givenExampleProgramWithFunctionsShouldOutputCorrectNumbers() {
+        // given
+        Execution e = new Execution(Main.buildSampleProgramContainingProcedures());
+
+        // when
+        e.run();
+
+        // then
+        assertEquals("200\n200\n110\nProgram finished\n", output.toString());
     }
 
     private static void primesUpToN(int n) {
