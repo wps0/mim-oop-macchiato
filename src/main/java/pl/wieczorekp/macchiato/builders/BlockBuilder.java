@@ -1,6 +1,7 @@
 package pl.wieczorekp.macchiato.builders;
 
 import pl.wieczorekp.macchiato.instructions.expressions.Expression;
+import pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression;
 import pl.wieczorekp.macchiato.instructions.statements.*;
 
 import java.util.List;
@@ -59,6 +60,10 @@ public class BlockBuilder {
     public BlockBuilder print(Expression message) {
         context.appendStatement(new PrintStatement(context, message));
         return this;
+    }
+
+    public BlockBuilder print(Integer message) {
+        return print(new LiteralExpression(message));
     }
 
     public CodeBlock build() {
