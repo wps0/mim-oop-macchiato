@@ -10,23 +10,6 @@ import java.util.List;
 import static pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression.ONE_LITERAL;
 import static pl.wieczorekp.macchiato.instructions.expressions.LiteralExpression.ZERO_LITERAL;
 
-/*
- * Class members order:
- *  - static final vars
- *  - static vars
- *  - final vars
- *  - other vars
- *  - constructors
- *  - abstract methods
- *  - other methods
- *  - static methods
- *  - overloaded methods (overloaded from classes other than Object; overloaded from Object class)
- *  - nested classes
- *  - nested enums
- * All the blocks should be ordered by visibility (namely: public, protected, package-private, private)
- *
- */
-
 public class Main {
 
     public static CodeBlock buildSampleProgramPrimesWithoutBuilders(int ub) {
@@ -174,10 +157,14 @@ public class Main {
         forBody.appendStatement(new PrintStatement(forBody, new VariableExpression("i")));
 
         CodeBlock nestedForBody = new CodeBlock(forBody);
-        ForStatement nestedForLoop = new ForStatement(forBody, "j", new SumExpression(new LiteralExpression(1), new VariableExpression("i")), nestedForBody);
+        ForStatement nestedForLoop = new ForStatement(forBody,
+                "j",
+                new SumExpression(new LiteralExpression(1), new VariableExpression("i")),
+                nestedForBody);
         forBody.appendStatement(nestedForLoop);
 
-        nestedForBody.appendStatement(new PrintStatement(nestedForBody, new SumExpression(new LiteralExpression(10), new VariableExpression("j"))));
+        nestedForBody.appendStatement(new PrintStatement(nestedForBody,
+                new SumExpression(new LiteralExpression(10), new VariableExpression("j"))));
 
 
         Execution e = new Execution(root);

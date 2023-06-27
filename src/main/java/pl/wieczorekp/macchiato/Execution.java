@@ -63,7 +63,7 @@ public class Execution {
             output.println("The instruction is not nested that deep");
         }
         output.println("Variables:");
-        vars.forEach((var, val) -> output.printf("%s = %d\n", var, val));
+        vars.forEach((varName, val) -> output.printf("%s = %d%n", varName, val));
     }
 
     protected void execute() {

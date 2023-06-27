@@ -19,7 +19,6 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class DebuggerExecution extends Execution {
     private static final int BUFFER_SIZE = 16*1024;
@@ -211,7 +210,7 @@ public class DebuggerExecution extends Execution {
     @Override
     protected void execute() {
         System.out.println(" -------------------------------------- ");
-        System.out.printf("%29s\n", "MACCHIATO DEBUGGER");
+        System.out.printf("%29s%n", "MACCHIATO DEBUGGER");
         System.out.println(" -------------------------------------- ");
 
         // matches strings formatted like this: <str> [arg1 arg2 ...]
@@ -234,7 +233,7 @@ public class DebuggerExecution extends Execution {
                 }
                 args = args.stream()
                         .map(s -> s.stripLeading().stripTrailing())
-                        .collect(Collectors.toList());
+                        .toList();
 
                 List<Command> matchingCommands = findMatchingCommands(cmd);
                 if (matchingCommands.isEmpty()) {
@@ -261,6 +260,6 @@ public class DebuggerExecution extends Execution {
     private List<Command> findMatchingCommands(String cmd) {
         return commands.stream()
                 .filter(command -> command.cmd().equalsIgnoreCase(cmd) || command.shortCmd().equalsIgnoreCase(cmd))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

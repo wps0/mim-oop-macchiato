@@ -126,9 +126,9 @@ public class CodeBlock extends BlockStatement {
 
         Statement next = statements.get(instructionPointer);
         next.executeOne();
-        if (next instanceof BlockStatement) {
+        if (next instanceof BlockStatement nextBS) {
             // if BlockStatement hasn't finished yet, don't increase the instruction pointer
-            instructionPointer += Boolean.compare(((BlockStatement) next).hasEnded(), false);
+            instructionPointer += Boolean.compare(nextBS.hasEnded(), false);
         } else {
             instructionPointer++;
         }
@@ -146,8 +146,8 @@ public class CodeBlock extends BlockStatement {
         }
 
         Statement last = statements.get(getIp(shiftIP));
-        if (last instanceof BlockStatement) {
-            return ((BlockStatement) last).getCurrentStatement(shiftIP);
+        if (last instanceof BlockStatement lastBS) {
+            return lastBS.getCurrentStatement(shiftIP);
         }
         return Optional.of(last);
     }

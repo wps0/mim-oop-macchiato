@@ -108,14 +108,14 @@ public class IfStatement extends BlockStatement {
         GEQ((a, b) -> a >= b),
         LEQ((a, b) -> a <= b);
 
-        private final BiPredicate<Integer, Integer> condition;
+        private final BiPredicate<Integer, Integer> conditionChecker;
 
-        Condition(BiPredicate<Integer, Integer> condition) {
-            this.condition = condition;
+        Condition(BiPredicate<Integer, Integer> conditionChecker) {
+            this.conditionChecker = conditionChecker;
         }
 
         public boolean test(Integer a, Integer b) {
-            return this.condition.test(a, b);
+            return this.conditionChecker.test(a, b);
         }
     }
 }

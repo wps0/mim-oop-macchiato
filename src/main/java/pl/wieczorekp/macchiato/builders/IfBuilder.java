@@ -12,6 +12,7 @@ public class IfBuilder {
     private CodeBlock elseBranchBlock;
 
     public IfBuilder() {
+        // creates an empty builder
     }
 
     public IfBuilder leftOperand(Expression expression) {
